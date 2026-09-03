@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Archive Downloader — Custom Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #EBD8C9;
+      --sage: #7A9181;
+      --camel: #CDA26D;
+      --bg: #1a1c1b;
+      --card: #222624;
+      --card-inner: #1c1f1d;
+      --border: #2e3532;
+      --text: #f2ede8;
+      --muted: #a3a69f;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    @keyframes soft-pulse { 0%,100%{box-shadow:0 0 10px rgba(122,145,129,0.2)} 50%{box-shadow:0 0 18px rgba(122,145,129,0.5)} }
+    .node-active { animation: soft-pulse 1.4s infinite; border-color: var(--sage) !important; background: rgba(122,145,129,0.12) !important; }
+    @keyframes progress { from{width:0%} to{width:100%} }
+    .progress-fill { animation: progress 2.8s ease-out forwards; }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+
+  <!-- Personalized Banner -->
+  <div class="border-b px-4 py-2.5 text-xs text-center" style="background:#252a27;border-color:#2e3532;color:#EBD8C9">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-md font-semibold uppercase tracking-wider text-[10px] border" style="background:#7A9181;color:#f2ede8;border-color:#8da898">Custom POC</span>
+        <span>Specially designed for: <strong style="color:#f2ede8">Upwork Project — Download All Public Digital Resources</strong></span>
+      </div>
+      <div style="color:#a3a69f">
+        Engineered by: <span style="color:#CDA26D" class="font-medium">Senior Python & Data Automation Engineer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="border-b backdrop-blur sticky top-0 z-50" style="background:rgba(26,28,27,0.92);border-color:#2e3532">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-sm" style="background:#2e3532;border:1px solid #3a4240;color:#CDA26D">
+          <i class="fa-solid fa-building-columns text-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight flex items-center gap-2" style="color:#f2ede8">
+            SBHLA Digital Archive Downloader
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded-md" style="background:#2a302d;color:#7A9181;border:1px solid #3a4a42">Python + Requests</span>
+          </h1>
+          <p class="text-xs" style="color:#a3a69f">Automated Discovery, Download & Organization of Public Digital Collections</p>
+        </div>
+      </div>
+      <span class="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style="color:#7A9181;background:rgba(122,145,129,0.12);border:1px solid rgba(122,145,129,0.3)">
+        <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:#7A9181"></span> Live Interactive Demo
+      </span>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Pipeline Architecture -->
+    <div class="rounded-2xl p-6 shadow-xl" style="background:#222624;border:1px solid #2e3532">
+      <h2 class="text-xs uppercase tracking-wider font-semibold mb-4 flex items-center gap-2" style="color:#a3a69f">
+        <i class="fa-solid fa-diagram-project" style="color:#7A9181"></i> Download Pipeline Architecture
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div id="node-1" class="rounded-xl p-4 transition-all duration-300" style="background:#282c2a;border:1px solid #343a37">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm" style="background:rgba(122,145,129,0.2);color:#7A9181">1</div>
+            <div><div class="text-sm font-semibold" style="color:#f2ede8">Page Crawler</div><div class="text-xs" style="color:#a3a69f">Discover Collections</div></div>
+          </div>
+        </div>
+        <div id="node-2" class="rounded-xl p-4 transition-all duration-300" style="background:#282c2a;border:1px solid #343a37">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm" style="background:rgba(205,162,109,0.2);color:#CDA26D">2</div>
+            <div><div class="text-sm font-semibold" style="color:#f2ede8">Link Extractor</div><div class="text-xs" style="color:#a3a69f">PDF / Audio / Video</div></div>
+          </div>
+        </div>
+        <div id="node-3" class="rounded-xl p-4 transition-all duration-300" style="background:#282c2a;border:1px solid #343a37">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm" style="background:rgba(235,216,201,0.15);color:#EBD8C9">3</div>
+            <div><div class="text-sm font-semibold" style="color:#f2ede8">Downloader</div><div class="text-xs" style="color:#a3a69f">Resumable + Dedup</div></div>
+          </div>
+        </div>
+        <div id="node-4" class="rounded-xl p-4 transition-all duration-300" style="background:#282c2a;border:1px solid #343a37">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm" style="background:rgba(122,145,129,0.2);color:#7A9181">4</div>
+            <div><div class="text-sm font-semibold" style="color:#f2ede8">File Organizer</div><div class="text-xs" style="color:#a3a69f">Category / Collection / Year</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Panel -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="rounded-2xl p-6 shadow-xl space-y-5" style="background:#222624;border:1px solid #2e3532">
+          <div class="flex items-center justify-between pb-3" style="border-bottom:1px solid #2e3532">
+            <h3 class="font-bold text-sm flex items-center gap-2" style="color:#f2ede8">
+              <i class="fa-solid fa-gear" style="color:#CDA26D"></i> Download Configuration
+            </h3>
+          </div>
+          <div class="space-y-4 text-sm">
+            <div>
+              <label class="block text-xs font-medium mb-1" style="color:#a3a69f">Target Site</label>
+              <input id="inp-url" type="text" value="https://sbhla.org/digital-resources/" class="w-full rounded-lg px-3 py-2 text-sm" style="background:#1a1c1b;border:1px solid #343a37;color:#f2ede8;outline:none" readonly />
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1" style="color:#a3a69f">File Types to Collect</label>
+              <div class="flex flex-wrap gap-2 mt-1">
+                <span class="px-2.5 py-1 rounded-lg text-xs" style="background:rgba(122,145,129,0.15);color:#7A9181;border:1px solid rgba(122,145,129,0.3)"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</span>
+                <span class="px-2.5 py-1 rounded-lg text-xs" style="background:rgba(205,162,109,0.15);color:#CDA26D;border:1px solid rgba(205,162,109,0.3)"><i class="fa-solid fa-file-image mr-1"></i>Images</span>
+                <span class="px-2.5 py-1 rounded-lg text-xs" style="background:rgba(235,216,201,0.12);color:#EBD8C9;border:1px solid rgba(235,216,201,0.25)"><i class="fa-solid fa-file-audio mr-1"></i>Audio</span>
+                <span class="px-2.5 py-1 rounded-lg text-xs" style="background:rgba(122,145,129,0.15);color:#7A9181;border:1px solid rgba(122,145,129,0.3)"><i class="fa-solid fa-file-video mr-1"></i>Video</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1" style="color:#a3a69f">Deduplication</label>
+              <div class="flex items-center gap-2 text-xs" style="color:#EBD8C9">
+                <span class="w-4 h-4 rounded flex items-center justify-center text-[10px]" style="background:#7A9181;color:#f2ede8"><i class="fa-solid fa-check"></i></span>
+                MD5 hash comparison — exact duplicates auto-removed
+              </div>
+            </div>
+          </div>
+          <button id="run-btn" onclick="runDownloader()" class="w-full py-3 px-4 font-semibold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm" style="background:#7A9181;color:#f2ede8;border:1px solid #8da898">
+            <i class="fa-solid fa-download text-xs"></i> Start Archive Download
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="rounded-2xl p-6 shadow-xl" style="background:#222624;border:1px solid #2e3532">
+          <!-- Tabs -->
+          <div class="flex items-center space-x-2 pb-3 mb-5 text-sm overflow-x-auto" style="border-bottom:1px solid #2e3532">
+            <button onclick="switchTab('tab-tree')" id="btn-tab-tree" class="px-3.5 py-1.5 rounded-lg font-medium flex items-center gap-2 text-xs" style="background:#7A9181;color:#f2ede8;border:1px solid #8da898">
+              <i class="fa-solid fa-folder-tree"></i> Folder Structure
+            </button>
+            <button onclick="switchTab('tab-log')" id="btn-tab-log" class="px-3.5 py-1.5 rounded-lg font-medium flex items-center gap-2 text-xs" style="background:#1a1c1b;color:#a3a69f;border:1px solid #2e3532">
+              <i class="fa-solid fa-terminal"></i> Download Log
+            </button>
+            <button onclick="switchTab('tab-manifest')" id="btn-tab-manifest" class="px-3.5 py-1.5 rounded-lg font-medium flex items-center gap-2 text-xs" style="background:#1a1c1b;color:#a3a69f;border:1px solid #2e3532">
+              <i class="fa-solid fa-list-check"></i> Manifest CSV
+            </button>
+          </div>
+
+          <!-- Tab 1: Folder Structure -->
+          <div id="tab-tree" class="demo-tab space-y-4">
+            <div class="flex items-center justify-between text-xs" style="color:#a3a69f">
+              <span>Files organized by Category / Collection / Year</span>
+              <span id="stats-label" style="color:#7A9181">Ready to download</span>
+            </div>
+            <div class="rounded-xl p-4 font-mono text-xs space-y-1 leading-relaxed" style="background:#1a1c1b;border:1px solid #2e3532;color:#a3a69f">
+              <div><span style="color:#CDA26D"><i class="fa-solid fa-folder-open mr-1"></i>sbhla-digital-resources/</span></div>
+              <div class="ml-4"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>Annual Reports/</span></div>
+              <div class="ml-8"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>SBC Annual Reports/</span></div>
+              <div class="ml-12"><span style="color:#EBD8C9"><i class="fa-regular fa-file-pdf mr-1"></i>SBC_Annual_1845.pdf</span> <span style="color:#a3a69f">(2.3 MB)</span></div>
+              <div class="ml-12"><span style="color:#EBD8C9"><i class="fa-regular fa-file-pdf mr-1"></i>SBC_Annual_1846.pdf</span> <span style="color:#a3a69f">(1.8 MB)</span></div>
+              <div class="ml-12"><span style="color:#a3a69f">... 180 more files</span></div>
+              <div class="ml-4"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>Minutes/</span></div>
+              <div class="ml-8"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>WMU Minutes/</span></div>
+              <div class="ml-12"><span style="color:#EBD8C9"><i class="fa-regular fa-file-pdf mr-1"></i>WMU_Minutes_1888.pdf</span> <span style="color:#a3a69f">(4.1 MB)</span></div>
+              <div class="ml-12"><span style="color:#EBD8C9"><i class="fa-regular fa-file-pdf mr-1"></i>WMU_Minutes_1889.pdf</span> <span style="color:#a3a69f">(3.7 MB)</span></div>
+              <div class="ml-12"><span style="color:#a3a69f">... 95 more files</span></div>
+              <div class="ml-4"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>Photographs/</span></div>
+              <div class="ml-8"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>Historical Images/</span></div>
+              <div class="ml-12"><span style="color:#EBD8C9"><i class="fa-regular fa-file-image mr-1"></i>seminary_1920.jpg</span> <span style="color:#a3a69f">(840 KB)</span></div>
+              <div class="ml-12"><span style="color:#a3a69f">... 47 more files</span></div>
+              <div class="ml-4"><span style="color:#7A9181"><i class="fa-regular fa-folder mr-1"></i>Audio Recordings/</span></div>
+              <div class="ml-8"><span style="color:#EBD8C9"><i class="fa-regular fa-file-audio mr-1"></i>convention_sermon_1975.mp3</span> <span style="color:#a3a69f">(12.4 MB)</span></div>
+              <div class="ml-8"><span style="color:#a3a69f">... 23 more files</span></div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Download Log -->
+          <div id="tab-log" class="demo-tab hidden space-y-4">
+            <pre id="log-content" class="rounded-xl p-4 text-[11px] font-mono overflow-x-auto leading-relaxed" style="background:#1a1c1b;border:1px solid #2e3532;color:#a3a69f;max-height:400px;overflow-y:auto">
+<span style="color:#7A9181">[10:00:01]</span> Starting crawl: https://sbhla.org/digital-resources/
+<span style="color:#7A9181">[10:00:02]</span> Discovered 12 resource categories
+<span style="color:#7A9181">[10:00:04]</span> Category: Annual Reports — 4 collections found
+<span style="color:#7A9181">[10:00:05]</span> Category: Minutes — 3 collections found
+<span style="color:#7A9181">[10:00:07]</span> Category: Photographs — 2 collections found
+<span style="color:#7A9181">[10:00:08]</span> Category: Audio Recordings — 1 collection found
+<span style="color:#CDA26D">[10:00:10]</span> Total download links discovered: 347
+<span style="color:#CDA26D">[10:00:10]</span> Estimated total size: ~1.8 GB
+<span style="color:#7A9181">[10:00:11]</span> Downloading: Annual Reports/SBC Annual Reports/SBC_Annual_1845.pdf ... <span style="color:#7A9181">OK</span>
+<span style="color:#7A9181">[10:00:14]</span> Downloading: Annual Reports/SBC Annual Reports/SBC_Annual_1846.pdf ... <span style="color:#7A9181">OK</span>
+<span style="color:#EBD8C9">[10:00:18]</span> <span style="color:#CDA26D">DEDUP:</span> Skipped SBC_Annual_1846_copy.pdf (MD5 matches SBC_Annual_1846.pdf)
+<span style="color:#7A9181">[10:00:20]</span> Downloading: Minutes/WMU Minutes/WMU_Minutes_1888.pdf ... <span style="color:#7A9181">OK</span>
+<span style="color:#CDA26D">[10:02:45]</span> <span style="color:#CDA26D">RETRY (1/3):</span> Annual Reports/IMB/IMB_1960.pdf — timeout, retrying in 5s...
+<span style="color:#7A9181">[10:02:52]</span> Annual Reports/IMB/IMB_1960.pdf ... <span style="color:#7A9181">OK</span>
+<span style="color:#7A9181">[10:15:30]</span> ─────────────────────────────────────
+<span style="color:#7A9181">[10:15:30]</span> <span style="color:#CDA26D">DOWNLOAD COMPLETE</span>
+<span style="color:#7A9181">[10:15:30]</span> Total files: 345  |  Skipped (dup): 2  |  Failed: 0
+<span style="color:#7A9181">[10:15:30]</span> Total size: 1.76 GB  |  Time: 15m 30s</pre>
+          </div>
+
+          <!-- Tab 3: Manifest CSV -->
+          <div id="tab-manifest" class="demo-tab hidden space-y-4">
+            <div class="text-xs mb-2" style="color:#a3a69f">Manifest CSV listing every downloaded file with metadata:</div>
+            <div class="overflow-x-auto rounded-xl" style="border:1px solid #2e3532">
+              <table class="w-full text-left text-[11px] font-mono">
+                <thead style="background:#1a1c1b;color:#a3a69f" class="uppercase">
+                  <tr><th class="p-2">filename</th><th class="p-2">category</th><th class="p-2">collection</th><th class="p-2">size</th><th class="p-2">md5</th><th class="p-2">source_url</th></tr>
+                </thead>
+                <tbody class="divide-y" style="divide-color:#2e3532;background:#1e2220;color:#EBD8C9">
+                  <tr>
+                    <td class="p-2" style="color:#f2ede8">SBC_Annual_1845.pdf</td>
+                    <td class="p-2">Annual Reports</td>
+                    <td class="p-2">SBC Annual Reports</td>
+                    <td class="p-2" style="color:#7A9181">2.3 MB</td>
+                    <td class="p-2" style="color:#a3a69f">a3f8c9...d21</td>
+                    <td class="p-2" style="color:#CDA26D">sbhla.org/.../1845.pdf</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2" style="color:#f2ede8">WMU_Minutes_1888.pdf</td>
+                    <td class="p-2">Minutes</td>
+                    <td class="p-2">WMU Minutes</td>
+                    <td class="p-2" style="color:#7A9181">4.1 MB</td>
+                    <td class="p-2" style="color:#a3a69f">b7e2a1...f03</td>
+                    <td class="p-2" style="color:#CDA26D">sbhla.org/.../1888.pdf</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2" style="color:#f2ede8">seminary_1920.jpg</td>
+                    <td class="p-2">Photographs</td>
+                    <td class="p-2">Historical Images</td>
+                    <td class="p-2" style="color:#7A9181">840 KB</td>
+                    <td class="p-2" style="color:#a3a69f">c9d4b2...e17</td>
+                    <td class="p-2" style="color:#CDA26D">sbhla.org/.../1920.jpg</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function runDownloader(){const b=document.getElementById('run-btn');b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Downloading archive...';const n=['node-1','node-2','node-3','node-4'];n.forEach(x=>document.getElementById(x).classList.remove('node-active'));document.getElementById('stats-label').textContent='Scanning...';let s=0;const labels=['Crawling pages...','Extracting links...','Downloading files...','Organizing folders...'];const i=setInterval(()=>{if(s<n.length){if(s>0)document.getElementById(n[s-1]).classList.remove('node-active');document.getElementById(n[s]).classList.add('node-active');document.getElementById('stats-label').textContent=labels[s];s++}else{clearInterval(i);n.forEach(x=>document.getElementById(x).classList.remove('node-active'));document.getElementById('stats-label').innerHTML='<i class="fa-solid fa-check"></i> 345 files downloaded, 2 duplicates removed';b.innerHTML='<i class="fa-solid fa-check" style="color:#7A9181"></i> Download Complete (1.76 GB)';setTimeout(()=>{b.innerHTML='<i class="fa-solid fa-download text-xs"></i> Start Archive Download'},2500)}},500)}
+    function switchTab(t){document.querySelectorAll('.demo-tab').forEach(e=>e.classList.add('hidden'));document.getElementById(t).classList.remove('hidden');['tab-tree','tab-log','tab-manifest'].forEach(x=>{const b=document.getElementById('btn-'+x);if(x===t){b.style.background='#7A9181';b.style.color='#f2ede8';b.style.borderColor='#8da898'}else{b.style.background='#1a1c1b';b.style.color='#a3a69f';b.style.borderColor='#2e3532'}})}
+  </script>
+</body>
+</html>
